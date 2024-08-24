@@ -14,7 +14,7 @@ func main() {
     http.HandleFunc("/", handlers.HomeHandler)
 
 	// Log the server is running
-    fmt.Println("Server started on port %d", port)
+    fmt.Println("Server started on port", port)
 
 	// Start the server and listen on the port, printing an error if encountered
     if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
