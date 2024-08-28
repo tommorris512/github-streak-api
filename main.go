@@ -5,7 +5,7 @@ import (
     "os"
     "net/http"
     "github.com/joho/godotenv"
-    "github-streak-api/internal/handlers"
+    "github-streak-api/handlers"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 
 	// Start the server and listen on the port, printing an error if encountered
     if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
-        fmt.Printf("Error: %s\n", err)#
+        fmt.Printf("Error: %s\n", err)
         return
     }
 }
