@@ -21,7 +21,6 @@ func main() {
     
     // Obtain the GitHub token
     githubToken := os.Getenv("GITHUB_TOKEN")
-    fmt.Println("GitHub token found: %s", githubToken)
 
 	// Assign the relevant handlers to paths
     http.HandleFunc("/", handlers.HomeHandler)
