@@ -14,8 +14,10 @@ func ContributionHandler(writer http.ResponseWriter, request *http.Request, user
     }
 
     totalContributions := utils.CalculateTotalContributions(data)
-    mostContribDate, mostContribCount := utils.CalculateMostDailyContributions(data)
+    maxDailyContributions, maxDailyContributionsDate := utils.CalculateMostDailyContributions(data)
+    longestStreak := utils.CalculateLongestContributionStreak(data)
 
     fmt.Fprintf(writer, "User %s has made %d contributions this year.\n", username, totalContributions)
-    fmt.Fprintf(writer, "Most contributions in a day: %d on %s\n", mostContribCount, mostContribDate)
+    fmt.Fprintf(writer, "Most contributions in a day: %d on %s\n", maxDailyContributions, maxDailyContributionsDate)
+    fmt.Fprintf(writer, "Longest streak: %d days\n", longestStreak)
 }
