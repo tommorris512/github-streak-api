@@ -1,7 +1,6 @@
 package utils
 
 import (
-    "time"
 	"github-streak-api/types"
 )
 
