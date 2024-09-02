@@ -12,9 +12,9 @@ import (
  *
  * Returns:
  * - (int): The total contributions made in the contribution calendar.
-*/
+ */
 func CalculateTotalContributions(data types.ContributionCalendar) int {
-    return data.Data.User.ContributionsCollection.ContributionCalendar.TotalContributions
+	return data.Data.User.ContributionsCollection.ContributionCalendar.TotalContributions
 }
 
 /*
@@ -30,21 +30,21 @@ func CalculateTotalContributions(data types.ContributionCalendar) int {
  * Returns:
  * - (int): The daily contributions made on the day with the highest daily contributions in the contribution calendar.
  * - (string): The date of the highest daily contributions in the contribution calendar.
-*/
+ */
 func CalculateMostDailyContributions(data types.ContributionCalendar) (int, string) {
-    maxDailyContributions := 0
-    maxDailyContributionsDate := ""
+	maxDailyContributions := 0
+	maxDailyContributionsDate := ""
 
-    for _, week := range data.Data.User.ContributionsCollection.ContributionCalendar.Weeks {
-        for _, day := range week.ContributionDays {
-            if day.ContributionCount > maxDailyContributions {
-                maxDailyContributions = day.ContributionCount
-                maxDailyContributionsDate = day.Date
-            }
-        }
-    }
+	for _, week := range data.Data.User.ContributionsCollection.ContributionCalendar.Weeks {
+		for _, day := range week.ContributionDays {
+			if day.ContributionCount > maxDailyContributions {
+				maxDailyContributions = day.ContributionCount
+				maxDailyContributionsDate = day.Date
+			}
+		}
+	}
 
-    return maxDailyContributions, maxDailyContributionsDate
+	return maxDailyContributions, maxDailyContributionsDate
 }
 
 /*
@@ -59,28 +59,60 @@ func CalculateMostDailyContributions(data types.ContributionCalendar) (int, stri
  *
  * Returns:
  * - (int): The longest contribution streak in the contribution calendar.
-*/
+ */
 func CalculateLongestContributionStreak(data types.ContributionCalendar) int {
-    longestStreak := 0
-    streak := 0
+	longestStreak := 0
+	streak := 0
 
-    for _, week := range data.Data.User.ContributionsCollection.ContributionCalendar.Weeks {
-        for _, day := range week.ContributionDays {
-            if day.ContributionCount > 0 {
-                streak++
-            } else {
-                if streak > longestStreak {
-                    longestStreak = streak
-                }
+	for _, week := range data.Data.User.ContributionsCollection.ContributionCalendar.Weeks {
+		for _, day := range week.ContributionDays {
+			if day.ContributionCount > 0 {
+				streak++
+			} else {
+				if streak > longestStreak {
+					longestStreak = streak
+				}
 
-                streak = 0
-            }
-        }
-    }
+				streak = 0
+			}
+		}
+	}
 
-    if streak > longestStreak {
-        longestStreak = streak
-    }
+	if streak > longestStreak {
+		longestStreak = streak
+	}
 
-    return longestStreak
+	return longestStreak
+}
+
+/*
+ * Obtains the current streak of contributions.
+ *
+ * Iterates over each day in the ContributionCalendar in reverse-chronological order.
+ * The current streak counter is continually incremented until a day is reached that has no contributions, and the current streak is returned.
+ *
+ * Params:
+ * - data (types.ContributionCalendar): The ContributionCalendar used to obtain the current contribution streak from.
+ *
+ * Returns:
+ * - (int): The current contribution streak in the contribution calendar.
+ */
+func CalculateCurrentContributionStreak(data types.ContributionCalendar) int {
+	currentStreak := 0
+
+	for i := len(data.Data.User.ContributionsCollection.ContributionCalendar.Weeks) - 1; i >= 0; i-- {
+		week := data.Data.User.ContributionsCollection.ContributionCalendar.Weeks[i]
+
+		for j := len(week.ContributionDays) - 1; j >= 0; j-- {
+			day := week.ContributionDays[j]
+
+			if day.ContributionCount <= 0 {
+				return currentStreak
+			}
+
+			currentStreak++
+		}
+	}
+
+	return currentStreak
 }
