@@ -22,10 +22,17 @@ func main() {
     // Obtain the GitHub token
     githubToken := os.Getenv("GITHUB_TOKEN")
 
-	// Assign the relevant handlers to paths
-    http.HandleFunc("/", handlers.HomeHandler)
-	http.HandleFunc("/contributions", func(w http.ResponseWriter, r *http.Request) {
-        handlers.ContributionHandler(w, r, "tommorris512", githubToken)
+    //Assign the handler function to the root path
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+        // Extract the username parameter from the URL
+        username := request.URL.Query().Get("username")
+        if username == "" {
+            http.Error(writer, "Username is required", http.StatusBadRequest)
+            return
+        }
+
+        // Pass the username and GitHub token to the ContributionHandler
+        handlers.ContributionHandler(writer, request, username, githubToken)
     })
 
 	// Log the server is running
