@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"fmt"
-	"github-streak-api/utils"
 	"net/http"
+    "encoding/json"
+    "github-streak-api/types"
+    "github-streak-api/utils"
 )
 
 func ContributionHandler(writer http.ResponseWriter, request *http.Request, username string, token string) {
@@ -18,8 +19,24 @@ func ContributionHandler(writer http.ResponseWriter, request *http.Request, user
 	currentStreak := utils.CalculateCurrentContributionStreak(data)
 	longestStreak := utils.CalculateLongestContributionStreak(data)
 
-	fmt.Fprintf(writer, "User %s has made %d contributions this year.\n", username, totalContributions)
-	fmt.Fprintf(writer, "Most contributions in a day: %d on %s\n", maxDailyContributions, maxDailyContributionsDate)
-	fmt.Fprintf(writer, "Current streak: %d days\n", currentStreak)
-	fmt.Fprintf(writer, "Longest streak: %d days\n", longestStreak)
+    // Instantiate and populate a response object with the relevant data
+	response := types.ContributionDataResponse{
+		Username: username,
+		TotalContributions: totalContributions,
+		MaxDailyContributions: maxDailyContributions,
+		MaxDailyContributionsDate: maxDailyContributionsDate,
+		CurrentStreak: currentStreak,
+		LongestStreak: longestStreak,
+	}
+
+	// Convert the response object to JSON format
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(writer, "Error converting response to JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Set the content type of the response to JSON and write the response
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(jsonResponse)
 }
