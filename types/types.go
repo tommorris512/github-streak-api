@@ -18,3 +18,13 @@ type ContributionCalendar struct {
         } `json:"user"`
     } `json:"data"`
 }
+
+// Define a response type of structured JSON to return to API requests 
+type ContributionDataResponse struct {
+    Username string `json:"username"`
+    TotalContributions int `json:"total_contributions"`
+    MaxDailyContributions int `json:"max_daily_contributions"`
+    MaxDailyContributionsDate string `json:"max_daily_contributions_date"`
+    CurrentStreak int `json:"current_streak"`
+    LongestStreak int `json:"longest_streak"`
+}
