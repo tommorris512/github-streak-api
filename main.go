@@ -21,6 +21,10 @@ func main() {
     
     // Obtain the GitHub token
     githubToken := os.Getenv("GITHUB_TOKEN")
+    if githubToken == "" {
+        fmt.Println("Error: Unable to obtain GitHub access token")
+        return
+    }
 
     //Assign the handler function to the root path
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
