@@ -4,6 +4,7 @@ import (
     "fmt"
     "os"
     "net/http"
+    "log"
     "github.com/joho/godotenv"
     "github-streak-api/handlers"
 )
@@ -15,14 +16,14 @@ func main() {
     // Attempt to load the .env file
     err := godotenv.Load()
     if err != nil {
-        fmt.Printf("Error: %s\n", err)
+        log.Fatalf("Error: %s\n", err)
         return
     }
     
     // Obtain the GitHub token
     githubToken := os.Getenv("GITHUB_TOKEN")
     if githubToken == "" {
-        fmt.Println("Error: Unable to obtain GitHub access token")
+        log.Fatal("Error: Unable to obtain GitHub access token")
         return
     }
 
@@ -40,11 +41,11 @@ func main() {
     })
 
 	// Log the server is running
-    fmt.Println("Server started on port: ", port)
+    log.Printf("Server started on port: %d", port)
 
 	// Start the server and listen on the port, printing an error if encountered
     if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
-        fmt.Printf("Error: %s\n", err)
+        log.Fatalf("Error: %s\n", err)
         return
     }
 }
