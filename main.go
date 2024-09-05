@@ -13,14 +13,16 @@ func main() {
 	// Define the port number to run the server on
 	const port int = 8080
 
-    // Attempt to load the .env file
-    err := godotenv.Load()
-    if err != nil {
-        log.Fatalf("Error: %s\n", err)
-        return
+    // Check whether the code is in development or production
+    if envMode := os.Getenv("ENV_MODE"); envMode != "production" {
+        // Attempt to load the .env file
+        err := godotenv.Load()
+        if err != nil {
+            log.Fatalf("Error: %s\n", err)
+            return
+        }
     }
-    
-    // Obtain the GitHub token
+
     githubToken := os.Getenv("GITHUB_TOKEN")
     if githubToken == "" {
         log.Fatal("Error: Unable to obtain GitHub access token")
